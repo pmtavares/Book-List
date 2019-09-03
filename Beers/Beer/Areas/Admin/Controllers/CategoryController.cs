@@ -24,5 +24,11 @@ namespace Beer.Areas.Admin.Controllers
             List<Category> categories = await _db.Category.ToListAsync();
             return View(categories);
         }
+
+        //GET for create
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
