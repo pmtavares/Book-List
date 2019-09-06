@@ -30,5 +30,46 @@ namespace Beer.Areas.Admin.Controllers
         {
             return View();
         }
+
+        //POST for Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Category category)
+        {
+            if(ModelState.IsValid)
+            {
+                _db.Category.Add(category);
+                await _db.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(category);
+        }
+
+        //GET Edit
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            if(id == 0)
+            {
+                return NotFound();
+            }
+
+            var category = await _db.Category.FindAsync(id);
+            if(category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+
+        }
+
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            Category category = _db.Category.Find(id);
+            return View(category);
+        }
     }
 }

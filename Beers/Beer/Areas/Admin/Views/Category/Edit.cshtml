@@ -1,11 +1,14 @@
-﻿@model  Category
+﻿@model Beer.Models.Category
+
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
 <h3 class="text-info">
-    Create Category
+    Edit Category
 </h3>
 <form method="post" asp-action="Create">
     <div class="border backgroundWhite">
@@ -21,9 +24,20 @@
         </div>
         <div class="form-group row">
             <div class="col-5 offset-2">
-               <partial name="_CreateAndBackToListButton" />                
+                <div class="row">
+                    <div class="col-6">
+                        <input type="submit" class="btn btn-info form-control" asp-route-id="@Model.Id" value="Update"/>
+                    </div>
+                    <div class="col-6">
+                        <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </form>
+
+
+
+
 

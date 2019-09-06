@@ -38,7 +38,7 @@
                             @Html.DisplayFor(m => item.Name)
                         </td>
                         <td>
-                            EDIT | DELETE | DETAILS
+                            <partial name="_DetailEditDeleteButtonsPartial" model="item.Id"/>
                         </td>
                     </tr>
                 }
