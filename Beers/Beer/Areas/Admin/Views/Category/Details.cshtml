@@ -6,7 +6,14 @@
 
     <div class="border backgroundWhite">
         <h2>Details</h2>
-        <p>@Model.Id</p>
-        <p>@Model.Name</p>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Name" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="Name" readonly class="form-control" />
+            </div>
+            <partial name="_ToEditAndBackButtonPartial" model="Model.Id"/>
+        </div>
     </div>
 
