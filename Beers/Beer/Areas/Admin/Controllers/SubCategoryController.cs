@@ -147,5 +147,79 @@ namespace Beer.Areas.Admin.Controllers
             };
             return View(modelVM);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var subCategory = await _db.SubCategory.SingleOrDefaultAsync(m => m.Id == id);
+
+            if (subCategory == null)
+            {
+                return NotFound();
+            }
+
+            CategorySubCategoryViewModel model = new CategorySubCategoryViewModel()
+            {
+                CategoryList = await _db.Category.ToListAsync(),
+                SubCategory = subCategory,
+                SubCategoryList = await _db.SubCategory.OrderBy(p => p.Name).Select(p => p.Name).ToListAsync()
+            };
+
+            return View(model);
+
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
+        {
+
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            var subCategory = await _db.SubCategory.SingleOrDefaultAsync(m => m.Id == id);
+
+            if (subCategory == null)
+            {
+                return NotFound();
+            }
+
+            CategorySubCategoryViewModel model = new CategorySubCategoryViewModel()
+            {
+                CategoryList = await _db.Category.ToListAsync(),
+                SubCategory = subCategory,
+                SubCategoryList = await _db.SubCategory.OrderBy(p => p.Name).Select(p => p.Name).ToListAsync()
+            };
+            return View(model);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirm(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            var subCategory = await _db.SubCategory.SingleOrDefaultAsync(m => m.Id == id);
+
+            if (subCategory == null)
+            {
+                return NotFound();
+            }
+
+            _db.Remove(subCategory);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+        }
     }
 }
