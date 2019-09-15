@@ -1,0 +1,100 @@
+﻿@model Beer.Models.ViewModels.MenuItemViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="text-info">
+    Details Menu Item
+</h3>
+<form method="post" enctype="multipart/form-data">
+    <div class="border backgroundWhite row">
+        <div class="col-8">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Name" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MenuItem.Name" readonly class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Description" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    @Html.TextAreaFor(m => m.MenuItem.Description, new { @readonly = "readonly" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Price" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MenuItem.Price" readonly class="form-control" />
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.CategoryId" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input type="text" readonly class="form-control" asp-for="MenuItem.Category.Name" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.SubCategoryId" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input type="text" readonly asp-for="MenuItem.SubCategory.Name" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.AlcoholVol" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="MenuItem.AlcoholVol" asp-items="Html.GetEnumSelectList<MenuItem.EAlcohol>()"
+                            class="form-control" disabled></select>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-3 offset-1">
+            <img src="@Model.MenuItem.Image" width="100%" style="border-radius:5px; border:1px solid #bbb9b9" />
+        </div>
+
+        <div class="col-8">
+            <div class="col-8 offset-4">
+                <partial name="_ToEditAndBackButtonPartial" model="Model.MenuItem.Id" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: "lists",
+            menubar: false,
+            statusbar: false,
+            readonly : 1
+        });
+    </script>
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+
+}
+
