@@ -130,5 +130,41 @@ namespace Beer.Areas.Admin.Controllers
             Coupon coupon = await _db.Coupon.FindAsync(id);
             return View(coupon);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
+        {
+
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            var model = await _db.Coupon.FindAsync(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return View(model);
+
+        }
+
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirm(int id)
+        {
+            var model = await _db.Coupon.FindAsync(id);
+
+            if (model == null)
+            {
+                return View();
+            }
+
+            _db.Remove(model);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+        }
     }
 }
