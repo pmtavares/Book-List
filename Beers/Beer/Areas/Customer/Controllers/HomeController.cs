@@ -16,6 +16,9 @@ namespace Beer.Controllers
     {
         private readonly ApplicationDbContext _db;
 
+        [BindProperty]
+        public MenuItemViewModel MenuItemVM { get; set; }
+
         public HomeController(ApplicationDbContext db)
         {
             _db = db;
@@ -31,6 +34,30 @@ namespace Beer.Controllers
 
             return View(IndexVM);
         }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            MenuItemVM.MenuItem = await _db.MenuItem.Include(p => p.Category).Include(p => p.SubCategory).SingleOrDefaultAsync(m => m.Id == id);
+            MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
+
+
+            if (MenuItemVM.MenuItem == null)
+            {
+                return NotFound();
+            }
+
+            return View(MenuItemVM);
+        }
+
+
 
         public IActionResult Privacy()
         {

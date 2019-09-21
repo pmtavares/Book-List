@@ -47,15 +47,52 @@
 
 <br /><br /><br />
 
-            <div class="backgroundWhite container">
-                @foreach (var category in Model.Category)
-                {
-                    <div class="row" id="menu-wrapper">
-                        <partial name="_ThumbnailAreaPartial" model="@Model.MenuItem.Where(u => u.Category.Name.Equals(category.Name))" />
-                    </div>
-                    
+<div class="backgroundWhite container">
+    <ul id="menu-filters" class="menu-filter-list list-inline text-center">
+        <li class="filter active btn btn-secondary ml-1 mr-1 list-inline-item" data-filter="menu-restaurant">Show all</li>
 
-                }
+        @foreach (var item in Model.Category)
+        {
+            <li class="filter ml-1 mr-1" data-filter="@item.Name.Replace(" ", string.Empty)">@item.Name</li>
+        }
+    </ul>
+
+    @foreach (var category in Model.Category)
+    {
+        <div class="row" id="menu-wrapper">
+            <partial name="_ThumbnailAreaPartial" model="@Model.MenuItem.Where(u => u.Category.Name.Equals(category.Name))" />
+        </div>
 
 
-            </div>
+    }
+
+
+</div>
+
+@section Scripts  {
+<script src="~/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+
+<script>
+    var posts = $(".post");
+
+    (function ($) {
+        $("#menu-filters li").click(function () {
+            $("#menu-filters li").removeClass('active btn btn-secondary');
+            $(this).addClass('active btn btn-secondary');
+
+            var selectedFilter = $(this).data("filter");
+
+            $(".menu-restaurant").fadeOut();
+            setTimeout(function () {
+                $("." + selectedFilter).slideDown();
+            }, 300);
+        })
+
+
+
+
+    })(jQuery);
+
+</script>
+
+}
