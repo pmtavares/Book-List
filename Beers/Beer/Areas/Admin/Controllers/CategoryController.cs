@@ -4,11 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Beer.Data;
 using Beer.Models;
+using Beer.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Beer.Areas.Admin.Controllers
 {
+
+    [Authorize(Roles = SD.ManagerUser)]
     [Area("Admin")]
     public class CategoryController : Controller
     {

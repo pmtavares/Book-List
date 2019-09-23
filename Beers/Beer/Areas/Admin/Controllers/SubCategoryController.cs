@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Beer.Data;
 using Beer.Models;
 using Beer.Models.ViewModels;
+using Beer.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Beer.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.ManagerUser)]
     public class SubCategoryController : Controller
     {
 

@@ -82,6 +82,8 @@ namespace Beer.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            string role = Request.Form["rdUserRole"].ToString();
+
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
@@ -121,7 +123,32 @@ namespace Beer.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(SD.OfficeUser));
                     }
 
-                    await _userManager.AddToRoleAsync(user, SD.ManagerUser);
+                    if(role == SD.OfficeUser)
+                    {
+                        await _userManager.AddToRoleAsync(user, SD.OfficeUser);
+                    }
+                    else
+                    {
+                        if (role == SD.FrontDeskUser)
+                        {
+                            await _userManager.AddToRoleAsync(user, SD.FrontDeskUser);
+                        }
+                        else
+                        {
+                            if (role == SD.ManagerUser)
+                            {
+                                await _userManager.AddToRoleAsync(user, SD.ManagerUser);
+                            }
+                            else
+                            {
+                                await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
+                                await _signInManager.SignInAsync(user, isPersistent: false);
+                                return LocalRedirect(returnUrl);
+                            }
+                        }
+                    }
+
+
 
                     _logger.LogInformation("User created a new account with password.");
 
@@ -135,8 +162,8 @@ namespace Beer.Areas.Identity.Pages.Account
                     //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                     //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("Index", "User", new { area = "Admin" });
                 }
                 foreach (var error in result.Errors)
                 {
