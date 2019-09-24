@@ -8,6 +8,7 @@ using Beer.Models;
 using Beer.Data;
 using Beer.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Beer.Controllers
 {
@@ -37,26 +38,21 @@ namespace Beer.Controllers
 
 
 
-        [HttpGet]
-        public async Task<IActionResult> Details(int? id)
+        
+        [Authorize]
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory)
+                .Where(m => m.Id == id).FirstOrDefaultAsync();
 
-            MenuItemVM.MenuItem = await _db.MenuItem.Include(p => p.Category).Include(p => p.SubCategory).SingleOrDefaultAsync(m => m.Id == id);
-            MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
+            ShoppingCart cartObj = new ShoppingCart() {
+                   MenuItem = menuItemFromDb,
+                   MenuItemId = menuItemFromDb.Id
+            };
 
+            return View(cartObj);
 
-            if (MenuItemVM.MenuItem == null)
-            {
-                return NotFound();
-            }
-
-            return View(MenuItemVM);
         }
-
 
 
         public IActionResult Privacy()
